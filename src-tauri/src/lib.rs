@@ -1386,10 +1386,28 @@ fn markdown_title(path: &Path) -> Option<String> {
     None
 }
 
+fn source_id_matches(source: &ArtifactSource, source_id_value: &str) -> bool {
+    if source.id == source_id_value {
+        return true;
+    }
+    if source.is_custom {
+        return false;
+    }
+    source_id_value
+        .strip_prefix(&format!("{}-", source.provider_id))
+        .is_some_and(|suffix| {
+            !suffix.is_empty()
+                && suffix.len() <= 16
+                && suffix
+                    .chars()
+                    .all(|character| character.is_ascii_digit() || ('a'..='f').contains(&character))
+        })
+}
+
 fn resolve_source(state: &AppState, source_id_value: &str) -> Result<ArtifactSource, String> {
     approved_sources(state, false)?
         .into_iter()
-        .find(|source| source.id == source_id_value)
+        .find(|source| source_id_matches(source, source_id_value))
         .ok_or_else(|| "The requested artifact source is not approved.".to_string())
 }
 
@@ -1849,6 +1867,41 @@ mod tests {
         let second = built_in_source_id("copilot-vscode", Path::new("second-root"));
 
         assert_eq!(first, second);
+    }
+
+    #[test]
+    fn built_in_sources_accept_legacy_source_ids() {
+        let source = ArtifactSource {
+            id: built_in_source_id("copilot-vscode", Path::new("current-root")),
+            provider_id: "copilot-vscode".to_string(),
+            provider_name: "GitHub Copilot in VS Code".to_string(),
+            name: "GitHub Copilot in VS Code".to_string(),
+            root: "current-root".to_string(),
+            available: true,
+            is_custom: false,
+            artifact_count: 0,
+            roots: Vec::new(),
+        };
+        let legacy_id = source_id("copilot-vscode", Path::new("legacy-root"));
+
+        assert!(source_id_matches(&source, &legacy_id));
+        assert!(!source_id_matches(
+            &source,
+            "copilot-vscode-not-a-legacy-hash"
+        ));
+
+        let custom_source = ArtifactSource {
+            id: "custom-current".to_string(),
+            provider_id: "custom".to_string(),
+            provider_name: "Custom folder".to_string(),
+            name: "Custom folder".to_string(),
+            root: "custom-root".to_string(),
+            available: true,
+            is_custom: true,
+            artifact_count: 0,
+            roots: Vec::new(),
+        };
+        assert!(!source_id_matches(&custom_source, "custom-deadbeef"));
     }
 
     #[test]
