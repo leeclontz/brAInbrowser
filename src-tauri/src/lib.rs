@@ -21,6 +21,10 @@ const MAX_TITLE_BYTES: u64 = 65_536;
 const MAX_TIMELINE_FILES: usize = 5_000;
 const MAX_TIMELINE_PROMPTS: usize = 50_000;
 
+fn window_title(version: &str) -> String {
+    format!("BrAIn Browser v{version}")
+}
+
 #[derive(Clone, Serialize)]
 #[serde(rename_all = "camelCase")]
 struct ArtifactSource {
@@ -189,7 +193,7 @@ fn source_id(provider_id: &str, root: &Path) -> String {
 }
 
 fn built_in_source_id(provider_id: &str, _display_root: &Path) -> String {
-    format!("provider-{provider_id}")
+    provider_id.to_string()
 }
 
 fn settings_path(app: &AppHandle) -> Result<PathBuf, String> {
@@ -1393,6 +1397,9 @@ fn source_id_matches(source: &ArtifactSource, source_id_value: &str) -> bool {
     if source.is_custom {
         return false;
     }
+    if source_id_value == format!("provider-{}", source.provider_id) {
+        return true;
+    }
     source_id_value
         .strip_prefix(&format!("{}-", source.provider_id))
         .is_some_and(|suffix| {
@@ -1784,6 +1791,9 @@ pub fn run() {
         .plugin(tauri_plugin_clipboard_manager::init())
         .setup(|app| {
             let path = settings_path(&app.handle())?;
+            if let Some(window) = app.get_webview_window("main") {
+                window.set_title(&window_title(&app.package_info().version.to_string()))?;
+            }
             app.manage(AppState {
                 settings: Mutex::new(load_settings(&path)),
                 settings_path: path,
@@ -1844,6 +1854,11 @@ mod tests {
     }
 
     #[test]
+    fn window_title_includes_the_application_version() {
+        assert_eq!(window_title("0.9.3"), "BrAIn Browser v0.9.3");
+    }
+
+    #[test]
     fn identifies_supported_preview_types() {
         assert_eq!(preview_kind(Path::new("plan.md")), "markdown");
         assert_eq!(preview_kind(Path::new("session.jsonl")), "json");
@@ -1870,7 +1885,7 @@ mod tests {
     }
 
     #[test]
-    fn built_in_sources_accept_legacy_source_ids() {
+    fn built_in_sources_accept_current_and_legacy_source_ids() {
         let source = ArtifactSource {
             id: built_in_source_id("copilot-vscode", Path::new("current-root")),
             provider_id: "copilot-vscode".to_string(),
@@ -1884,6 +1899,8 @@ mod tests {
         };
         let legacy_id = source_id("copilot-vscode", Path::new("legacy-root"));
 
+        assert!(source_id_matches(&source, "copilot-vscode"));
+        assert!(source_id_matches(&source, "provider-copilot-vscode"));
         assert!(source_id_matches(&source, &legacy_id));
         assert!(!source_id_matches(
             &source,

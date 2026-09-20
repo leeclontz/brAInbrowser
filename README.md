@@ -5,6 +5,7 @@ BrAIn Browser is a private desktop explorer for files created by local AI tools.
 ## Privacy and safety
 
 - All discovery and preview work happens locally.
+- The native title bar shows the installed application version.
 - The app has no telemetry and makes no artifact-content network requests.
 - Built-in providers are limited to their documented configuration roots.
 - Browser-profile storage is not scanned.
