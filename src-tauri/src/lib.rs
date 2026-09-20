@@ -188,6 +188,10 @@ fn source_id(provider_id: &str, root: &Path) -> String {
     format!("{provider_id}-{:x}", hasher.finish())
 }
 
+fn built_in_source_id(provider_id: &str, _display_root: &Path) -> String {
+    format!("provider-{provider_id}")
+}
+
 fn settings_path(app: &AppHandle) -> Result<PathBuf, String> {
     app.path()
         .app_config_dir()
@@ -708,7 +712,7 @@ fn approved_sources(
                 0
             };
             ArtifactSource {
-                id: source_id(provider.id, &display_root),
+                id: built_in_source_id(provider.id, &display_root),
                 provider_id: provider.id.to_string(),
                 provider_name: provider.name.to_string(),
                 name: provider.name.to_string(),
@@ -1835,6 +1839,14 @@ mod tests {
         assert!(validate_relative_path("../secret.txt").is_err());
         assert!(validate_relative_path(r"C:\Users\someone\secret.txt").is_err());
         assert!(validate_relative_path("sessions/valid.jsonl").is_ok());
+    }
+
+    #[test]
+    fn built_in_source_ids_survive_display_root_changes() {
+        let first = built_in_source_id("copilot-vscode", Path::new("first-root"));
+        let second = built_in_source_id("copilot-vscode", Path::new("second-root"));
+
+        assert_eq!(first, second);
     }
 
     #[test]
