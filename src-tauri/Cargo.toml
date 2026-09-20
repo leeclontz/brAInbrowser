@@ -1,6 +1,6 @@
 [package]
 name = "brain-browser"
-version = "0.9.0"
+version = "0.9.1"
 description = "A private, local browser for AI application artifacts"
 authors = ["BrAIn Browser contributors"]
 edition = "2021"
