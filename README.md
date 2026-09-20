@@ -85,3 +85,5 @@ npm run tauri build
 ```
 
 Windows builds produce installer artifacts under `src-tauri\target\release\bundle`. macOS builds must run on macOS to produce `.app` and `.dmg` bundles.
+
+Version tags matching `v*` trigger GitHub Actions to build Windows x64 installers and macOS bundles for both Apple Silicon and Intel. Release binaries are currently unsigned, so Windows SmartScreen or macOS Gatekeeper may require confirmation before opening them.
