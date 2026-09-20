@@ -40,6 +40,7 @@ import {
   getPromptTimeline,
   getSources,
   listArtifacts,
+  openArtifactFolder,
   readPreview,
   removeCustomFolder,
   saveArtifact,
@@ -535,6 +536,15 @@ function App() {
     }
   }
 
+  async function handleOpenFolder() {
+    if (!selectedArtifact) return;
+    try {
+      await openArtifactFolder(selectedArtifact.absolutePath);
+    } catch (error) {
+      setMessage(`Could not open the containing folder: ${String(error)}`);
+    }
+  }
+
   async function handleExport() {
     if (!selectedSourceId || !selectedArtifact) return;
     try {
@@ -1025,7 +1035,13 @@ function App() {
           <div className="preview-surface">{renderPreview()}</div>
           {selectedArtifact && (
             <div className="path-bar" title={selectedArtifact.absolutePath}>
-              {selectedArtifact.absolutePath}
+              <span className="path-text">{selectedArtifact.absolutePath}</span>
+              <button
+                className="path-open-link"
+                onClick={() => void handleOpenFolder()}
+              >
+                <FolderOpen size={13} /> Open folder
+              </button>
             </div>
           )}
         </section>

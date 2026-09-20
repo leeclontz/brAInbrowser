@@ -1388,15 +1388,41 @@ h2 {
 }
 
 .path-bar {
-  overflow: hidden;
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  gap: 12px;
   padding: 8px 14px;
   border-top: 1px solid var(--border);
   color: #68646f;
   background: #151419;
   font-family: "Cascadia Code", "SFMono-Regular", Consolas, monospace;
   font-size: 9px;
+}
+
+.path-text {
+  min-width: 0;
+  flex: 1 1 auto;
+  overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+.path-open-link {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  gap: 5px;
+  padding: 0;
+  border: 0;
+  color: #918b99;
+  background: transparent;
+  font: inherit;
+  cursor: pointer;
+}
+
+.path-open-link:hover {
+  color: var(--accent);
 }
 
 ::-webkit-scrollbar {

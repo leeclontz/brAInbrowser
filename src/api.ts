@@ -1,4 +1,5 @@
 import { invoke } from "@tauri-apps/api/core";
+import { revealItemInDir } from "@tauri-apps/plugin-opener";
 import type {
   ArtifactEntry,
   ArtifactPreview,
@@ -61,4 +62,8 @@ export function exportArtifact(sourceId: string, relativePath: string) {
     sourceId,
     relativePath,
   });
+}
+
+export function openArtifactFolder(absolutePath: string) {
+  return revealItemInDir(absolutePath);
 }

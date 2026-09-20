@@ -42,6 +42,7 @@ Provider layouts can change between tool releases. BrAIn Browser classifies plan
 - Sorts artifacts by newest, name, size, or type.
 - Shows file-format badges and distinct icons for documents, databases, archives, binaries, images, and opaque stores.
 - Displays absolute paths and detailed metadata for unsupported files.
+- Reveals the selected artifact in File Explorer on Windows or Finder on macOS.
 - Provides likely-role summaries for session, memory, history, cache, state, and database artifacts without claiming to decode proprietary schemas.
 - Supports explicit Edit mode for safe UTF-8 text artifacts. Save activates only after a change and rejects stale writes when another application changed the file.
 - Opens all artifact category groups collapsed for a compact initial view.
