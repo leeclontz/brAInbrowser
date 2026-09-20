@@ -1837,6 +1837,8 @@ mod tests {
     #[test]
     fn rejects_paths_outside_an_approved_root() {
         assert!(validate_relative_path("../secret.txt").is_err());
+        assert!(validate_relative_path("/Users/someone/secret.txt").is_err());
+        #[cfg(target_os = "windows")]
         assert!(validate_relative_path(r"C:\Users\someone\secret.txt").is_err());
         assert!(validate_relative_path("sessions/valid.jsonl").is_ok());
     }
