@@ -34,6 +34,7 @@ import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { writeText } from "@tauri-apps/plugin-clipboard-manager";
 import "./App.css";
+import brainBrowserLogo from "./assets/brain-browser-logo.png";
 import {
   addCustomFolder,
   exportArtifact,
@@ -715,7 +716,12 @@ function App() {
     <main className="app-shell">
       <header className="titlebar">
         <div className="brand">
-          <div className="brand-mark">AI</div>
+          <img
+            className="brand-mark"
+            src={brainBrowserLogo}
+            alt=""
+            aria-hidden="true"
+          />
           <div>
             <strong>BrAIn Browser</strong>
             <span>Local AI artifact explorer</span>

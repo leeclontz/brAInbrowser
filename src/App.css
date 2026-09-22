@@ -66,18 +66,12 @@ button {
 }
 
 .brand-mark {
-  display: grid;
   width: 36px;
   height: 36px;
-  place-items: center;
-  border: 1px solid rgba(189, 255, 74, 0.42);
-  border-radius: 10px;
-  color: #10120d;
-  background: var(--accent);
-  font-size: 12px;
-  font-weight: 800;
-  letter-spacing: -0.6px;
-  box-shadow: 0 0 24px rgba(189, 255, 74, 0.08);
+  flex: 0 0 36px;
+  object-fit: contain;
+  pointer-events: none;
+  user-select: none;
 }
 
 .brand strong,
