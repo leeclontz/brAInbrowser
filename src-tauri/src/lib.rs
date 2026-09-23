@@ -1127,6 +1127,33 @@ fn string_value(value: &Value) -> Option<String> {
         .map(str::to_string)
 }
 
+fn fallback_session_id(path: &Path) -> String {
+    let stem = path
+        .file_stem()
+        .and_then(|value| value.to_str())
+        .unwrap_or("Unknown session");
+    if matches!(
+        stem.to_ascii_lowercase().as_str(),
+        "conversation"
+            | "conversations"
+            | "events"
+            | "history"
+            | "messages"
+            | "prompts"
+            | "session"
+    ) {
+        if let Some(parent) = path
+            .parent()
+            .and_then(Path::file_name)
+            .and_then(|value| value.to_str())
+            .filter(|value| !value.is_empty())
+        {
+            return parent.to_string();
+        }
+    }
+    stem.to_string()
+}
+
 fn timeline_prompt_from_value(
     value: &Value,
     source: &ArtifactSource,
@@ -1222,12 +1249,7 @@ fn timeline_prompt_from_value(
             )
             .and_then(string_value)
         })
-        .or_else(|| {
-            path.file_stem()
-                .and_then(|value| value.to_str())
-                .map(str::to_string)
-        })
-        .unwrap_or_else(|| "Unknown session".to_string());
+        .unwrap_or_else(|| fallback_session_id(path));
 
     Some(TimelinePrompt {
         text: text.trim().to_string(),
@@ -2168,6 +2190,18 @@ mod tests {
         assert_eq!(codex_prompt.provider_name, "OpenAI");
         assert_eq!(claude_prompt.text, "Review it");
         assert!(claude_prompt.timestamp_ms.is_some());
+    }
+
+    #[test]
+    fn derives_session_id_from_generic_transcript_parent() {
+        assert_eq!(
+            fallback_session_id(Path::new("session-state/abc-123/events.jsonl")),
+            "abc-123"
+        );
+        assert_eq!(
+            fallback_session_id(Path::new("projects/my-session.jsonl")),
+            "my-session"
+        );
     }
 
     #[test]

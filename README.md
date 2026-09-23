@@ -53,7 +53,8 @@ Provider layouts can change between tool releases. BrAIn Browser classifies plan
 - Gives JSONL session files a **Prompt History** view that recognizes common Copilot, Claude, Codex, and generic user-message records, orders prompts newest-first, and retains a Raw JSONL tab.
 - Displays CSV files as scrollable tables with header rows, row numbers, quoted-field handling, and bounded rendering.
 - Separates transcript, event, history, and session-database files into **Session Logs**, while other files beneath session roots appear under **Other Session Artifacts** unless they match a more specific category.
-- Adds **Prompt Timeline** above the application list, aggregating recognized prompts from every approved local JSONL provider root into one searchable, provider-filterable, newest-first view.
+- Adds **Prompt Timeline** above the application list, aggregating recognized prompts from every approved local JSONL provider root into one searchable, provider-filterable view that defaults to newest-first and can cluster prompts into collapsible sessions.
+- Orders session clusters by newest activity and displays prompts oldest-first within each expanded session.
 - Provides a per-prompt copy button in **Prompt Timeline** with visible success or failure feedback.
 - Filters assistant, model, tool, system, function, execution, and tool-result events from prompt views even when those records carry copied user-context fields.
 - Understands structured Claude Code content blocks, excluding protocol-level `user` messages that contain only tool results while preserving genuine text blocks and pasted code prompts.

@@ -226,7 +226,7 @@ button {
 
 .timeline-controls {
   display: grid;
-  grid-template-columns: minmax(260px, 1fr) 190px;
+  grid-template-columns: minmax(260px, 1fr) 170px 170px;
   gap: 8px;
   padding: 12px 20px 8px;
 }
@@ -283,6 +283,76 @@ button {
   border-radius: 10px;
   background: rgba(24, 23, 28, 0.94);
   box-shadow: 0 7px 22px rgba(0, 0, 0, 0.08);
+}
+
+.timeline-session-list {
+  display: grid;
+  max-width: 980px;
+  gap: 10px;
+  margin: 0 auto;
+  padding: 0;
+  list-style: none;
+}
+
+.timeline-session-group {
+  overflow: hidden;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: rgba(24, 23, 28, 0.78);
+  box-shadow: 0 7px 22px rgba(0, 0, 0, 0.08);
+}
+
+.timeline-session-header {
+  display: grid;
+  width: 100%;
+  min-height: 48px;
+  grid-template-columns: auto auto minmax(100px, 1fr) auto auto;
+  align-items: center;
+  gap: 11px;
+  padding: 8px 13px;
+  cursor: pointer;
+  text-align: left;
+  background: #1d1b21;
+}
+
+.timeline-session-header:hover {
+  background: #232128;
+}
+
+.timeline-session-header:focus-visible {
+  outline: 1px solid var(--accent);
+  outline-offset: -2px;
+}
+
+.timeline-session-chevron {
+  display: grid;
+  color: #817b89;
+  place-items: center;
+}
+
+.timeline-session-header code {
+  overflow: hidden;
+  color: #aaa5b2;
+  font-family: "Cascadia Code", "SFMono-Regular", Consolas, monospace;
+  font-size: 10px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.timeline-session-count {
+  color: #77717f;
+  font-size: 9px;
+  white-space: nowrap;
+}
+
+.timeline-session-prompts {
+  gap: 10px;
+  padding: 12px;
+  border-top: 1px solid var(--border-soft);
+}
+
+.timeline-session-prompts > li {
+  box-shadow: none;
 }
 
 .timeline-card-top,
